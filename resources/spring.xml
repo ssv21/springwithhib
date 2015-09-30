@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+
+xmlns:tx="http://www.springframework.org/schema/tx"
+
+xsi:schemaLocation="
+
+http://www.springframework.org/schema/beans
+
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+
+http://www.springframework.org/schema/context
+
+http://www.springframework.org/schema/context/spring-context-3.0.xsd
+
+http://www.springframework.org/schema/tx
+
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+<context:component-scan base-package="org" />
+
+<tx:annotation-driven transaction-manager="hibernateTransactionManager"/>
+
+<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+ <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+ <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+ <property name="username" value="system"></property>
+ <property name="password" value="tiger"></property>
+ </bean>
+ 
+ <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+
+<property name="dataSource" ref="dataSource" />
+<property name="annotatedClasses">
+<list>
+<value>org.tables.Answers</value>
+<value>org.tables.Questions</value>
+<value>org.tables.TagList</value>
+<value>org.tables.TWQSN</value>
+<value>org.tables.USERT</value>
+<value>org.tables.USRQT</value>
+</list>
+</property>
+
+<property name="hibernateProperties">
+<props>
+<prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+<prop key="hibernate.show_sql">true</prop>
+</props>
+</property>
+</bean>
+
+<bean id="hibernatetransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+<property name="sessionFactory" ref="sessionFactory" />
+</bean>
+<bean id ="ques" class="org.dao.QuestionsDAOImp">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id ="ans" class="org.dao.AnswersDAOImp">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id ="tag" class="org.dao.TagListDAOImp">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id ="tgwqn" class="org.dao.TWQSNDAOImpl">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id ="user" class="org.dao.USERTDAOImp">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+<bean id ="usqtdao" class="org.dao.USRQTDAOImp">
+<property name="sessionFactory" ref="sessionFactory"/>
+</bean>
+
+</beans>
